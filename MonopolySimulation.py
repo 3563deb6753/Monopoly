@@ -13,6 +13,7 @@ def removeNewLines(names):
         namesClean.append(x)
     return namesClean
 
+#Create a new game
 def newGame():
     #get property names from file and put them in name list
     #properties are accessed by their index
@@ -20,7 +21,7 @@ def newGame():
     #39 = Boardwalk
     inFile = open("Monopoly", "r")
     names = []
-    names = inFile.readlines() #returns a list
+    names = inFile.readlines() 
     inFile.close()
     names = removeNewLines(names)
     
@@ -32,13 +33,16 @@ def newGame():
     for x in range(40):
         propertyVisits.append(0)
     
-    #intialize player locations @ zero i.e. Go
+    #intialize player locations at zero i.e. Go
     playerLocations = []
     for x in range(PLAYERS):
         playerLocations.append(0)
         
     return names, propertyVisits, playerLocations
 
+# After the simulated game is complete, this function creates a horizontal bar graph 
+# showing the total number of times that a player landed on each property.  The property
+# with the most visits is highlighted in yellow
 def displayVisits(propertyVisits, names):
     xCor = names
     yCor = propertyVisits
@@ -51,11 +55,14 @@ def displayVisits(propertyVisits, names):
     barlist[yCor.index(max(yCor))].set_color('yellow')
     plt.show()
 
+# After each round, this function tallies an additional visit for the 
+# properties that the players land on
 def setVisits(propertyVisits, playerLocations):
     for player in range (PLAYERS):
         propertyVisits[playerLocations[player]] +=1 
     return propertyVisits
 
+# This function rolls the dice.  It doesn't include double rolls or jail.
 def roll(doubleCount):
     first = random.randint(1,6)
     second = random.randint(1,6)
@@ -63,7 +70,6 @@ def roll(doubleCount):
 
 def main():
     names, propertyVisits, playerLocations = newGame()
-    
     for rounds in range (1000):
         for player in range (PLAYERS):
             playerLocations[player] += roll(0)
