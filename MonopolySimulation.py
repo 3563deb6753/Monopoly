@@ -2,79 +2,78 @@ import random
 import matplotlib.pyplot as plt
 
 
-def removeNewLines(board):
-    boardClean =[]
-    for x in board:
+PLAYERS = 3
+
+#helper code for cleaning up text file 
+#only used by newGame()
+def removeNewLines(names):
+    namesClean =[]
+    for x in names:
         x = x.rstrip("\n")
-        boardClean.append(x)
-    board = boardClean
-    return board
+        namesClean.append(x)
+    return namesClean
 
 def newGame():
-    #get board from file
+    #get property names from file and put them in name list
+    #properties are accessed by their index
+    #0 = Go
+    #39 = Boardwalk
     inFile = open("Monopoly", "r")
-    board = []
-    board= inFile.readlines() #returns a list
+    names = []
+    names = inFile.readlines() #returns a list
     inFile.close()
-    board = removeNewLines(board)
+    names = removeNewLines(names)
     
-    #intialize board visits @ zero
-    boardVisits = {}
-    for x in range(len(board)):
-        boardVisits[x] = 0
+    #intialize list of property visits @ zero
+    #properties are accessed by their index
+    #0 = Go
+    #39 = Boardwalk
+    propertyVisits = []
+    for x in range(40):
+        propertyVisits.append(0)
     
-    #intialize player locations @ zero
-    playerLocations = { "p1":0, "p2":0, "p3":0}
-    return board, boardVisits, playerLocations
+    #intialize player locations @ zero i.e. Go
+    playerLocations = []
+    for x in range(PLAYERS):
+        playerLocations.append(0)
+        
+    return names, propertyVisits, playerLocations
 
-def displayVisits(boardVisits, board):
-    xCor = []
-    yCor = []
-    for key in boardVisits:
-        xCor.append(key)
-        yCor.append(boardVisits[key])
-    plt.bar(xCor, yCor, 1)
+def displayVisits(propertyVisits, names):
+    xCor = names
+    yCor = propertyVisits
+    plt.figure(figsize=(14,25))
+    plt.xticks(size = 10)
+    plt.xlabel('Times a Player Landed on Property')
+    plt.yticks(size = 10)
+    barlist = plt.barh(xCor, yCor, 1)
+    plt.grid(color='#95a5a6', linestyle='--', linewidth=2, axis='x', alpha=0.7)
+    barlist[yCor.index(max(yCor))].set_color('yellow')
     plt.show()
-#    for key in boardVisits:
-#        print(format(str(boardVisits[key]), "5"), end ="")
-#        print(board[key])
 
-def setVisits(boardVisits, playerLocations):
-    p1 = playerLocations["p1"]
-    p2 = playerLocations["p2"]
-    p3 = playerLocations["p3"]
-    boardVisits[p1] += 1
-    boardVisits[p2] += 1
-    boardVisits[p3] += 1
-    return boardVisits
+def setVisits(propertyVisits, playerLocations):
+    for player in range (PLAYERS):
+        propertyVisits[playerLocations[player]] +=1 
+    return propertyVisits
 
 def roll(doubleCount):
     first = random.randint(1,6)
     second = random.randint(1,6)
-#    if (first == second):
-#        doubleCount += 1
-#        if (doubleCount < 3 ):
-#            print(str(first), str(second), end=" ")
-#            roll(doubleCount)
-#        else:
-#            print("go to jail")
     return first + second
 
 def main():
-    board, boardVisits, playerLocations = newGame()
-    for turn in range (1000):
-        playerLocations["p1"] += roll(0)
-        playerLocations["p1"] = playerLocations["p1"]%40
-        playerLocations["p2"] += roll(0)
-        playerLocations["p2"] = playerLocations["p2"]%40
-        playerLocations["p3"] += roll(0)
-        playerLocations["p3"] = playerLocations["p3"]%40
-        boardVisits = setVisits(boardVisits, playerLocations)   
-
+    names, propertyVisits, playerLocations = newGame()
     
-    displayVisits(boardVisits, board)
+    for rounds in range (1000):
+        for player in range (PLAYERS):
+            playerLocations[player] += roll(0)
+            playerLocations[player] = playerLocations[player]%40
+            
+        propertyVisits = setVisits(propertyVisits, playerLocations)   
+    
+    displayVisits(propertyVisits, names)
 
-main()
+
 
 
 
