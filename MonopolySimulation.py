@@ -78,6 +78,8 @@ def main():
         propertyVisits = setVisits(propertyVisits, playerLocations)   
     
     displayVisits(propertyVisits, names)
+    
+main()
 
 
 
