@@ -53,6 +53,7 @@ def displayVisits(propertyVisits, names):
     barlist = plt.barh(xCor, yCor, 1)
     plt.grid(color='#95a5a6', linestyle='--', linewidth=2, axis='x', alpha=0.7)
     barlist[yCor.index(max(yCor))].set_color('yellow')
+    print(yCor.index(max(yCor)))
     plt.show()
 
 # After each round, this function tallies an additional visit for the 
@@ -70,13 +71,20 @@ def roll(doubleCount):
 
 def main():
     names, propertyVisits, playerLocations = newGame()
-    for rounds in range (1000):
+    for rounds in range (2000):
         for player in range (PLAYERS):
             playerLocations[player] += roll(0)
             playerLocations[player] = playerLocations[player]%40
-            
         propertyVisits = setVisits(propertyVisits, playerLocations)   
-    
+        #send to jail, but don't count this as the landing square;
+        #assume that player buys out of jail in next round
+        for player in range (PLAYERS):
+            if (playerLocations[player]==30):
+                playerLocations[player]=10
+        #restart the game; assumes each games is 100 rounds
+        if rounds == 100:
+            for player in range (PLAYERS):
+                playerLocations[player]=0
     displayVisits(propertyVisits, names)
     
 main()
