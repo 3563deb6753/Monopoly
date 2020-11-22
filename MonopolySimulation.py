@@ -70,7 +70,7 @@ def roll(doubleCount):
 
 def main():
     names, propertyVisits, playerLocations = newGame()
-    for rounds in range (1000):
+    for rounds in range (2000):
         for player in range (PLAYERS):
             playerLocations[player] += roll(0)
             playerLocations[player] = playerLocations[player]%40
@@ -80,6 +80,10 @@ def main():
         for player in range (PLAYERS):
             if (playerLocations[player]==30):
                 playerLocations[player]=10
+        #restart the game; assumes each games is 100 rounds
+        if rounds == 100:
+            for player in range (PLAYERS):
+                playerLocations[player]=0
     displayVisits(propertyVisits, names)
     
 main()
