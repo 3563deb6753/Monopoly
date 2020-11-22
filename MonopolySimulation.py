@@ -53,6 +53,7 @@ def displayVisits(propertyVisits, names):
     barlist = plt.barh(xCor, yCor, 1)
     plt.grid(color='#95a5a6', linestyle='--', linewidth=2, axis='x', alpha=0.7)
     barlist[yCor.index(max(yCor))].set_color('yellow')
+    print(yCor.index(max(yCor)))
     plt.show()
 
 # After each round, this function tallies an additional visit for the 
