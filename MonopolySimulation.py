@@ -74,9 +74,12 @@ def main():
         for player in range (PLAYERS):
             playerLocations[player] += roll(0)
             playerLocations[player] = playerLocations[player]%40
-            
         propertyVisits = setVisits(propertyVisits, playerLocations)   
-    
+        #send to jail, but don't count this as the landing square;
+        #assume that player buys out of jail in next round
+        for player in range (PLAYERS):
+            if (playerLocations[player]==30):
+                playerLocations[player]=10
     displayVisits(propertyVisits, names)
     
 main()
