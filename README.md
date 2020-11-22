@@ -3,3 +3,4 @@ This python3 program simulates a very simple monopoly game and creates a bar gra
 
 To run: 
 python3 MonopolySimulation.py
+![](Screenshot.png)
